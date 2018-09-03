@@ -27,4 +27,4 @@ while(str != "END\n"):
         msg = "args:", inst.args[0]
         print(msg)
         logging.error(msg)
-    str = sys.stdin.readline()
+    #str = sys.stdin.readline()
