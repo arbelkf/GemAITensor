@@ -7,14 +7,16 @@ import os
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class TensorStrategy():
-    def DoStrategy(self, ticker):
+    def RunPrediction(self, ticker):
         filename = os.path.join(definitions.IMPORTLocationFiles , '{}.csv'.format(ticker))
         data = pd.read_csv(filename)
 
         # Drop date variable
-        data = data.drop(['DATE'], 1)
+        data = data.drop(['Datetime'], 1)
 
         # Dimensions of dataset
         n = data.shape[0]

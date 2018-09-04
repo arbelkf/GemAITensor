@@ -12,19 +12,19 @@ import logging
 
 print("Write \"import\" - to import all tickers")
 str = sys.stdin.readline()
-while(str != "END\n"):
-    try:
-        strparam = str.split()
-        if (strparam[0] == "import"):
-            cls = ImportUtil()
-            cls.GetAllSymbols()
-            print("END")
-        if (strparam[0] == "chk"):
-            ticker = strparam[1]
-            cls = TensorStrategy()
-            cls.DoStrategy(ticker)
-    except Exception as inst:
-        msg = "args:", inst.args[0]
-        print(msg)
-        logging.error(msg)
+#while(str != "END\n"):
+try:
+    strparam = str.split()
+    if (strparam[0] == "import"):
+        cls = ImportUtil()
+        cls.GetAllSymbols()
+        print("END")
+    if (strparam[0] == "chk"):
+        ticker = strparam[1]
+        cls = TensorStrategy()
+        cls.DoStrategy(ticker)
+except Exception as inst:
+    msg = "args:", inst.args[0]
+    print(msg)
+    logging.error(msg)
     #str = sys.stdin.readline()
