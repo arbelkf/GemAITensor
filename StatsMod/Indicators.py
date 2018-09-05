@@ -3,7 +3,7 @@ import numpy as np
 
 class Indicators(object):
 
-    def rsiFunc(self, prices, n=14):
+    def get_rsi(self, prices, n=14):
         deltas = np.diff(prices)
         seed = deltas[:n + 1]
         up = seed[seed >= 0].sum() / n
@@ -13,7 +13,7 @@ class Indicators(object):
         rsi[:n] = 100. - 100. / (1. + rs)
 
         for i in range(n, len(prices)):
-            delta = deltas[i - 1]  # cause the diff is 1 shorter
+            delta = deltas[i - 1]
 
             if delta > 0:
                 upval = delta
@@ -30,23 +30,15 @@ class Indicators(object):
 
         return rsi
 
-    def movingaverage(self, values, window):
-        weigths = np.repeat(1.0, window) / window
-        smas = np.convolve(values, weigths, 'valid')
-        return smas  # as a numpy array
 
-    def ExpMovingAverage(self, values, window):
+    def CompExpMovingAverage(self, values, window):
         weights = np.exp(np.linspace(-1., 0., window))
         weights /= weights.sum()
         a = np.convolve(values, weights, mode='full')[:len(values)]
         a[:window] = a[window]
         return a
 
-    def computeMACD(self, x, slow=26, fast=12):
-        """
-        compute the MACD (Moving Average Convergence/Divergence) using a fast and slow exponential moving avg'
-        return value is emaslow, emafast, macd which are len(x) arrays
-        """
-        emaslow = self.ExpMovingAverage(x, slow)
-        emafast = self.ExpMovingAverage(x, fast)
+    def CompMACD(self, x, slow=26, fast=12):
+        emaslow = self.CompExpMovingAverage(x, slow)
+        emafast = self.CompExpMovingAverage(x, fast)
         return emaslow, emafast, emafast - emaslow
