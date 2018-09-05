@@ -3,7 +3,7 @@ import numpy as np
 
 class Indicators(object):
 
-    def get_rsi(self, prices, n=14):
+    def CompRSI(self, prices, n=14):
         deltas = np.diff(prices)
         seed = deltas[:n + 1]
         up = seed[seed >= 0].sum() / n
@@ -42,3 +42,7 @@ class Indicators(object):
         emaslow = self.CompExpMovingAverage(x, slow)
         emafast = self.CompExpMovingAverage(x, fast)
         return emaslow, emafast, emafast - emaslow
+
+    def CompReturn(selfself, x):
+        ret = x.pct_change(1)
+        return ret

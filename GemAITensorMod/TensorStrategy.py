@@ -12,11 +12,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class TensorStrategy():
     def RunPrediction(self, ticker):
-        filename = os.path.join(definitions.IMPORTLocationFiles , '{}.csv'.format(ticker))
+        filename = os.path.join(definitions.IndicatorLocationFiles , '{}.csv'.format(ticker))
         data = pd.read_csv(filename)
 
         # Drop date variable
-        data = data.drop(['Datetime'], 1)
+        #data = data.drop(['Datetime'], 1)
 
         # Dimensions of dataset
         n = data.shape[0]
@@ -39,11 +39,11 @@ class TensorStrategy():
         data_train = scaler.transform(data_train)
         data_test = scaler.transform(data_test)
 
-        # Build X and y
-        X_train = data_train[:, 1:]
-        y_train = data_train[:, 0]
-        X_test = data_test[:, 1:]
-        y_test = data_test[:, 0]
+        # Build X and y - first column is the index
+        X_train = data_train[:, 2:]
+        y_train = data_train[:, 1]
+        X_test = data_test[:, 2:]
+        y_test = data_test[:, 1]
 
         # Number of stocks in training data
         n_stocks = X_train.shape[1]

@@ -12,6 +12,9 @@ import sys
 import logging
 
 print("Write \"import\" - to import all tickers")
+print("Write \"indi all\" - to import all tickers")
+print("Write \"indi ticker\" - to import specific ticker")
+print("Write \"chk ticker\" - to machine learn a specific ticker")
 str = sys.stdin.readline()
 #while(str != "END\n"):
 try:
@@ -20,15 +23,18 @@ try:
         cls = ImportUtil()
         cls.GetAllSymbols()
         print("END")
-    if (strparam[0] == "rsi"):
+    if (strparam[0] == "indi"):
         ticker = strparam[1]
         cls = Stocks()
-        cls.Get_All_Indicators(ticker)
+        if (ticker == 'all'):
+            cls.GetAllTickersIndicators()
+        else:
+            cls.Get_All_Indicators(ticker)
         print("END")
     if (strparam[0] == "chk"):
         ticker = strparam[1]
         cls = TensorStrategy()
-        cls.DoStrategy(ticker)
+        cls.RunPrediction(ticker)
 except Exception as inst:
     msg = "args:", inst.args[0]
     print(msg)
