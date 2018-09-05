@@ -1,26 +1,52 @@
 import pandas as pd
+import numpy as np
 
-class Indicators():
+class Indicators(object):
 
-    @classmethod
-    def Get_Rsi(self, df, n_days):
-        n_days = int(n_days)
-        d = df['close']
+    def rsiFunc(self, prices, n=14):
+        deltas = np.diff(prices)
+        seed = deltas[:n + 1]
+        up = seed[seed >= 0].sum() / n
+        down = -seed[seed < 0].sum() / n
+        rs = up / down
+        rsi = np.zeros_like(prices)
+        rsi[:n] = 100. - 100. / (1. + rs)
 
-        df['closepm'] = (d + d.abs()) / 2
-        df['closenm'] = (-d + d.abs()) / 2
-        closepm_smma_column = 'closepm_{}_smma'.format(n_days)
-        closenm_smma_column = 'closenm_{}_smma'.format(n_days)
-        p_ema = df[closepm_smma_column]
-        n_ema = df[closenm_smma_column]
+        for i in range(n, len(prices)):
+            delta = deltas[i - 1]  # cause the diff is 1 shorter
 
-        rs_column_name = 'rs_{}'.format(n_days)
-        rsi_column_name = 'rsi_{}'.format(n_days)
-        df[rs_column_name] = rs = p_ema / n_ema
-        df[rsi_column_name] = 100 - 100 / (1.0 + rs)
+            if delta > 0:
+                upval = delta
+                downval = 0.
+            else:
+                upval = 0.
+                downval = -delta
 
-        del df['closepm']
-        del df['closenm']
-        del df[closepm_smma_column]
-        del df[closenm_smma_column]
-        return df
+            up = (up * (n - 1) + upval) / n
+            down = (down * (n - 1) + downval) / n
+
+            rs = up / down
+            rsi[i] = 100. - 100. / (1. + rs)
+
+        return rsi
+
+    def movingaverage(self, values, window):
+        weigths = np.repeat(1.0, window) / window
+        smas = np.convolve(values, weigths, 'valid')
+        return smas  # as a numpy array
+
+    def ExpMovingAverage(self, values, window):
+        weights = np.exp(np.linspace(-1., 0., window))
+        weights /= weights.sum()
+        a = np.convolve(values, weights, mode='full')[:len(values)]
+        a[:window] = a[window]
+        return a
+
+    def computeMACD(self, x, slow=26, fast=12):
+        """
+        compute the MACD (Moving Average Convergence/Divergence) using a fast and slow exponential moving avg'
+        return value is emaslow, emafast, macd which are len(x) arrays
+        """
+        emaslow = self.ExpMovingAverage(x, slow)
+        emafast = self.ExpMovingAverage(x, fast)
+        return emaslow, emafast, emafast - emaslow

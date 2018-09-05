@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from .Indicators import Indicators
+from StatsMod import Indicators
 import definitions
 
 class Stocks():
@@ -9,8 +9,8 @@ class Stocks():
     def Get_All_Indicators(self, ticker):
         filenameInput = definitions.IMPORTLocationFiles + '\{}.csv'.format(ticker)
         df = pd.read_csv(filenameInput)
-        cls = Indicators()
-        df = cls.Get_Rsi(df, 14)
+        indi = Indicators.Indicators()
+        df['rsi'] = indi.rsiFunc(df['CLOSE'], 14)
         filenameOutput = definitions.IndicatorLocationFiles + '\{}.csv'.format(ticker)
         df.to_csv(filenameOutput)
         return df
@@ -22,6 +22,11 @@ class Stocks():
         dfdata.dropna(how='all', inplace=True)
         return dfdata
 
-
-cls = Stocks()
-cls.Get_All_Indicators('AAPL')
+try:
+    cls = Stocks()
+    cls.Get_All_Indicators('AAPL')
+except Exception as inst:
+    print(type(inst))  # the exception instance
+    print(inst.args)  # arguments stored in .args
+    print(inst)  # __str__ allows args to be printed directly,
+    print("args:", inst.args[0])
