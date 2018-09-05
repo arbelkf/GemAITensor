@@ -49,15 +49,14 @@ class AbstractStrategy(object , metaclass=abc.ABCMeta):
     # add indexes to the dataframe
     # ticker = name of the index
     # df - the datafarem to add the index to
-    def AddRSI(self, ticker, df):
+    def AddRSI(self, ticker, df, cls = Stocks()):
 
         #df2 = pd.read_csv(definitions.IMPORTLocationFiles + '\{}.csv'.format(ticker))
         #df2.set_index('Date', inplace=True)
         #df2.rename(columns={'Adj Close': ticker}, inplace=True)
         #df2.drop(['Open', 'High', 'Low', 'Close', 'Volume'], 1, inplace=True)
-        d#f = df.join(df2, how='inner')
+        #df = df.join(df2, how='inner')
 
-        cls = Stocks()
         df = cls.Get_Rsi(df, 14)
         return df
 

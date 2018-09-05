@@ -38,7 +38,7 @@ class ImportUtil():
                 if (df.size > 1):
                     filename = definitions.IMPORTLocationFiles + '/{}.csv'.format(ticker)
                     df.to_csv(filename)
-                    print()
+                    print('.')
 
             except Exception as inst:
                 msg = "cant find {} ".format(ticker) + "args:", inst.args[0]

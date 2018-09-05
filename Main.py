@@ -7,6 +7,7 @@
 # GemAIModule - runs diffrent kinds of prediction procedures
 from ImportMod.Import import ImportUtil
 from GemAITensorMod.TensorStrategy import TensorStrategy
+from StatsMod.StatsUtils import Stocks
 import sys
 import logging
 
@@ -18,6 +19,11 @@ try:
     if (strparam[0] == "import"):
         cls = ImportUtil()
         cls.GetAllSymbols()
+        print("END")
+    if (strparam[0] == "rsi"):
+        ticker = strparam[1]
+        cls = Stocks()
+        cls.Get_All_Indicators(ticker)
         print("END")
     if (strparam[0] == "chk"):
         ticker = strparam[1]
