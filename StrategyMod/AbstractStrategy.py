@@ -63,3 +63,6 @@ class AbstractStrategy(object , metaclass=abc.ABCMeta):
         print("Processing using {} clf {} high {} low {} hm {}".format(self._name, self.Clf_Name, self._highestLimit,
                                                                      self._lowestLimit, self._hm_days))
         self.buy_sell_hold()
+
+
+        y, dftemp, pred = self.ExtractLabels(df)

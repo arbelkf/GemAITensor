@@ -27,9 +27,26 @@ class PercentToTimeStrategy(AbstractStrategy):
                 return -1
         return 0
 
-    def do_ml(ticker):
-        #extract startegy and class
-        for strategy in strategyList:
-            context = Context.Context(strategy)
-            context.ProcessSpecificTicker(ticker)
+    def ExtractLabels(self, dfdata):
+        df = self.process_data_for_labels(dfdata)
+        #print(df.iloc[-1:])
+        dfdata = self.ExtractFeatures(dfdata)
+        hm_days = self.Hm_days
+        #create future revenue
+        #for i in range(1,hm_days+1):
+        #    df['Rev_{}d'.format(i)] = (df['adj close'].shift(-i) -df['adj close']) / df['adj close']
 
+        lst = []
+        for x in range(1, self.Hm_days + 1):
+            lst.append(df['_{}d'.format(x)])
+
+
+        dfdata['target'] = list(map(self.buy_sell_hold, *lst))
+
+        #df.dropna(inplace=True)
+        dfdata = self.CleanDF(dfdata)
+
+        dfdata['target'] = dfdata['target'].shift(-1)
+
+
+        del dfdata['adj close']
