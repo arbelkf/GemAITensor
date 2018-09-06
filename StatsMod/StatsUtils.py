@@ -42,6 +42,34 @@ class Stocks():
         df.to_csv(filenameOutput)
         return df
 
+    @classmethod
+    def Get_SequentialRSI(self, ticker, hm_days):
+        filenameInput = definitions.IMPORTLocationFiles + '\{}.csv'.format(ticker)
+        df = pd.read_csv(filenameInput)
+        indi = Indicators.Indicators()
+        close = df['CLOSE']
+        df['return'] = indi.CompReturn(close)
+        df['rsi'] = indi.CompRSI(close, 14)
+        df['rsi_ret'] = df['rsi'].pct_change()
+
+
+        for i in range(1, hm_days + 1):
+            df['rsiRev_{}m'.format(i)] = df['rsi_ret'].shift(i)
+
+        df = df.rename(columns={0: 'index'})
+        df = df.drop(['Datetime'], 1)
+        df = df.drop(['OPEN'], 1)
+        df = df.drop(['HIGH'], 1)
+        df = df.drop(['LOW'], 1)
+        df = df.drop(['VOLUME'], 1)
+        df = df.drop(['CLOSE'], 1)
+        df = df.drop(['rsi_ret'], 1)
+        df = df.drop(['rsi'], 1)
+        filenameOutput = definitions.IndicatorLocationFiles + '\{}.csv'.format(ticker)
+        df = self.CleanDF(df)
+        df.to_csv(filenameOutput)
+        return df
+
     # clean the dataframe from np.infinity, -np.infinity and drop all NAN
     @classmethod
     def CleanDF(self, dfdata):
@@ -52,7 +80,7 @@ class Stocks():
 
 try:
     cls = Stocks()
-    cls.Get_All_Indicators('AAPL')
+    cls.Get_SequentialRSI('AAPL', 7)
     print('END')
 except Exception as inst:
     print(type(inst))  # the exception instance

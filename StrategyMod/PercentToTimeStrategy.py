@@ -1,7 +1,7 @@
 import abc
 from .AbstractStrategy import AbstractStrategy
-
-class AbstractPercentForPeriodStrategy(AbstractStrategy):
+from StrategyMod import Context
+class PercentToTimeStrategy(AbstractStrategy):
 
     def process_data_for_labels(self, dfdata):
         hm_days = self.Hm_days
@@ -26,3 +26,10 @@ class AbstractPercentForPeriodStrategy(AbstractStrategy):
             if col < -self.LowestLimit:
                 return -1
         return 0
+
+    def do_ml(ticker):
+        #extract startegy and class
+        for strategy in strategyList:
+            context = Context.Context(strategy)
+            context.ProcessSpecificTicker(ticker)
+
