@@ -6,14 +6,17 @@ import definitions
 import os
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
+from StrategyMod import AbstractStrategy
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class TensorStrategy():
-    def RunPrediction(self, ticker):
+    def RunPrediction(self, ticker, strategy):
         filename = os.path.join(definitions.IndicatorLocationFiles , '{}.csv'.format(ticker))
         data = pd.read_csv(filename)
+
+        df = strategy.ProcessSpecificTicker(data)
 
         # Drop date variable
         #data = data.drop(['Datetime'], 1)

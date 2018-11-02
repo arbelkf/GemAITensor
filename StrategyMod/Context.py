@@ -9,5 +9,5 @@ class Context:
         self._strategy = strategy
 
     def ProcessSpecificTicker(self, ticker):
-        acc, confusionmatrix, final = self._strategy.ProcessSpecificTicker(ticker)
-        return acc, confusionmatrix, final
+        X, y = self._strategy.ProcessSpecificTicker(ticker)
+        return X, y

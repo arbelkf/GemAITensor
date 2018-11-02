@@ -1,52 +1,29 @@
 import abc
 from .AbstractStrategy import AbstractStrategy
 from StrategyMod import Context
+
+
 class PercentToTimeStrategy(AbstractStrategy):
 
-    def process_data_for_labels(self, dfdata):
+    def AddPastValues(self, dfdata):
         hm_days = self.Hm_days
-        df = dfdata.copy()
-        # value of each "_{i}d" will be the change of the current day to the base day value
-        for i in range(1 , hm_days +1):
-            df['_{}d'.format(i)] = (df['close'].shift(-i) -df['close']) / df['close']
-        return df
+        for i in range(1, hm_days + 1):
+            dfdata['Rev_{}d'.format(i)] = (dfdata['adj close'].shift(i) - dfdata['adj close'].shift(i-1)) / dfdata['adj close'].shift(i-1)
 
-        # calculate the labels from the "_{i}d"
-        # if the next hm change of values will go above HighestLimit - return 1
-        # if the next hm change of values will go under LowestLimit - return -1
-        # if the next hm change of values will be in between values - return 0
+        return dfdata
 
-
-    def buy_sell_hold(self, *args):
-        cols = [c for c in args]
-        # requirment , default = 0.02
-        for col in cols:
-            if col > self.HighestLimit:
-                return 1
-            if col < -self.LowestLimit:
-                return -1
-        return 0
 
     def ExtractLabels(self, dfdata):
-        df = self.process_data_for_labels(dfdata)
         #print(df.iloc[-1:])
-        dfdata = self.ExtractFeatures(dfdata)
-        hm_days = self.Hm_days
-        #create future revenue
-        #for i in range(1,hm_days+1):
-        #    df['Rev_{}d'.format(i)] = (df['adj close'].shift(-i) -df['adj close']) / df['adj close']
+        dfdata = self.AddPastValues(dfdata)
 
-        lst = []
-        for x in range(1, self.Hm_days + 1):
-            lst.append(df['_{}d'.format(x)])
-
-
-        dfdata['target'] = list(map(self.buy_sell_hold, *lst))
-
-        #df.dropna(inplace=True)
-        dfdata = self.CleanDF(dfdata)
 
         dfdata['target'] = dfdata['target'].shift(-1)
 
 
         del dfdata['adj close']
+
+
+        # drop the last row - cause the is no y there and it anyhow save for prediction
+        dfdata = dfdata.drop(dfdata.index[len(dfdata) - 1])
+        return dfdata

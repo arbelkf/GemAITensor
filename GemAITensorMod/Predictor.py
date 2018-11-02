@@ -21,13 +21,10 @@ class Predictor(object):
 
     def PredictTicker(self, ticker):
 
-        try:
-            print("Processing:{}".format(ticker))
-
-
-            # interate all the strategies in the array
-            for str in self._StrategyList:
-                self.DoStrategy(str,ticker)
+        print("Processing:{}".format(ticker))
+        # interate all the strategies in the array
+        for str in self._StrategyList:
+            acc, confusionmatrix, final = self.DoStrategy(str,ticker)
 
 
 cls = Predictor()
