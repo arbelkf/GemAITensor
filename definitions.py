@@ -12,5 +12,5 @@ ImportEndDayStartDate = dt.datetime(1995, 1, 1)
 ImportEndDayEndDate = dt.datetime(2018, 10, 30)
 ImportEndDayLocation = os.path.join(ROOT_DIR, 'ImportMod\\ImportEndDay')
 ImportEndDayProcessedLocation = os.path.join(ROOT_DIR, 'ImportMod\\ImportedEndDayIndicators')
-
+TempExcelFile = os.path.join(ROOT_DIR, 'pdsimple.xlsx')
 IndexesList = ['^DJI','^GDAXI','^HSI','^FCHI','^GSPC','^IXIC', '^N225','^RUT', '^TYX']

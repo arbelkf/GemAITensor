@@ -33,7 +33,7 @@ class ImportUtil(object):
                     print(msg)
                     logging.error(msg)
 
-    def get_ndx_data_from_yahoo(self):
+    def Get_ndx_data_from_yahoo(self):
 
         data = pd.read_csv(definitions.NDXfile)
         tickers = data['ticker']
@@ -43,10 +43,10 @@ class ImportUtil(object):
 
         self.GetTickers(tickers, filepath)
 
-    def get_indexes(self):
+    def Get_indexes(self):
 
         tickers = definitions.IndexesList
         self.GetTickers(tickers, definitions.IndexesLocation)
 
-cls = ImportUtil()
-cls.get_indexes()
+#cls = ImportUtil()
+#cls.get_indexes()

@@ -7,13 +7,14 @@ import os
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 from StrategyMod import AbstractStrategy
+from StrategyMod import PercentToTimeStrategy
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class TensorStrategy():
     def RunPrediction(self, ticker, strategy):
-        filename = os.path.join(definitions.IndicatorLocationFiles , '{}.csv'.format(ticker))
+        filename = os.path.join(definitions.ImportEndDayProcessedLocation , '{}.csv'.format(ticker))
         data = pd.read_csv(filename)
 
         df = strategy.ProcessSpecificTicker(data)
@@ -28,18 +29,36 @@ class TensorStrategy():
         # Make data a np.array
         data = data.values
 
+
+
+
         # Training and test data
         train_start = 0
         train_end = int(np.floor(0.8*n))
         test_start = train_end + 1
         test_end = n
+
+
+
         data_train = data[np.arange(train_start, train_end), :]
         data_test = data[np.arange(test_start, test_end), :]
+
+
 
         # Scale data
         scaler = MinMaxScaler(feature_range=(-1, 1))
         scaler.fit(data_train)
         data_train = scaler.transform(data_train)
+
+        print("train {}".format(np.isnan(data_train).any()))
+        print("test {} ".format(np.isnan(data_test).any()))
+        print("test type {} ".format(type(data_test)))
+
+        #data_test = data_test[(data_test.T != NAN ).any()]
+
+        where_are_NaNs = np.isnan(data_test )
+        data_test[where_are_NaNs] = 0
+
         data_test = scaler.transform(data_test)
 
         # Build X and y - first column is the index
@@ -143,3 +162,7 @@ class TensorStrategy():
                     line2.set_ydata(pred)
                     plt.title('Epoch ' + str(e) + ', Batch ' + str(i))
                     plt.pause(0.01)
+
+cls = TensorStrategy()
+strategy = PercentToTimeStrategy.PercentToTimeStrategy()
+cls.RunPrediction('AAPL', strategy)

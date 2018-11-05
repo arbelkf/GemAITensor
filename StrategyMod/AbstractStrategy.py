@@ -49,7 +49,7 @@ class AbstractStrategy(object , metaclass=abc.ABCMeta):
     def ProcessSpecificTicker(self, df):
         try:
             df = self.ExtractLabels(df)
-            df = preprocessing.StandardScaler().fit_transform(df)
+            #df = preprocessing.StandardScaler().fit_transform(df)
             return df
 
         except ValueError:

@@ -11,7 +11,7 @@ from StatsMod.StatsUtils import Stocks
 import sys
 import logging
 
-print("Write \"import\" - to import all tickers")
+print("Write \"import\" - to import all tickers and indexes")
 print("Write \"indi all\" - to import all tickers")
 print("Write \"indi ticker\" - to import specific ticker")
 print("Write \"chk ticker\" - to machine learn a specific ticker")
@@ -22,6 +22,7 @@ try:
     if (strparam[0] == "import"):
         cls = ImportUtil()
         cls.GetAllSymbols()
+        cls.Get_indexes()
         print("END")
     if (strparam[0] == "indi"):
         ticker = strparam[1]

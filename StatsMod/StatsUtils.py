@@ -78,7 +78,7 @@ class Stocks():
         dfdata.dropna(how='all', inplace=True)
         return dfdata
 
-try:
+'''try:
     cls = Stocks()
     cls.Get_SequentialRSI('AAPL', 7)
     print('END')
@@ -86,4 +86,4 @@ except Exception as inst:
     print(type(inst))  # the exception instance
     print(inst.args)  # arguments stored in .args
     print(inst)  # __str__ allows args to be printed directly,
-    print("args:", inst.args[0])
+    print("args:", inst.args[0])'''
